@@ -11,6 +11,8 @@ const BookModel = require("../models/Book");
 
 const isTokenValid = require("../validate");
 
+const { errorCodes, errorTypes } = require("../errorHandler");
+
 const context = async (req) => {
 	const db = {
 		AuthorModel,
@@ -30,6 +32,17 @@ const expressGraphQLMiddleware = expressGraphQl(async (req) => ({
 	schema: schema, // Build schema
 	graphiql: true,
 	context: () => context(req),
+	customFormatErrorFn: (err) => {
+		const {
+			message,
+			originalError: { type = errorTypes.INTERNAL_SERVER_ERROR },
+		} = err;
+		const statusCode = errorCodes[type];
+		return {
+			message,
+			statusCode,
+		};
+	},
 }));
 
 module.exports = expressGraphQLMiddleware; //Exporting graphQl method
