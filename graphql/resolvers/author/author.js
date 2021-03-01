@@ -1,7 +1,9 @@
-const AuthorModel = require("../../../models/Author");
+const author = async (parent, args, context, info) => {
+	const { db, requiresAuth } = await context(); // get methods from context
+	const permission = "get:author"; // required permission to access this endpoint
+	await requiresAuth(permission);
 
-const author = (parent, args, context, info) => {
-	let data = new AuthorModel().findOne("id", args.id);
+	let data = new db.AuthorModel().findOne("id", args.id);
 	return data;
 };
 
