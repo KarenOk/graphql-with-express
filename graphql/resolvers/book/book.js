@@ -1,7 +1,9 @@
-const BookModel = require("../../../models/Book");
+const Book = async (book, args, context, info) => {
+	const { db, requiresAuth } = await context(); // get methods from context
+	const permission = "get:books"; // required permission to access this endpoint
+	await requiresAuth(permission);
 
-const Book = (book, args, context, info) => {
-	let data = new BookModel().findOne("isbn", args.isbn);
+	let data = new db.BookModel().findOne("isbn", args.isbn);
 	return data;
 };
 

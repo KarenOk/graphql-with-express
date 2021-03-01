@@ -1,9 +1,10 @@
-const BookModel = require("../../../models/Book");
-const AuthorModel = require("../../../models/Author");
+const books = async (parent, args, context, info) => {
+	const { db, requiresAuth } = await context(); // get methods from context
+	const permission = "get:books"; // required permission to access this endpoint
+	await requiresAuth(permission);
 
-const books = (parent, args, context, info) => {
-	let data = new BookModel().findAll();
-	let authors = new AuthorModel().findAll();
+	let data = new db.BookModel().findAll();
+	let authors = new db.AuthorModel().findAll();
 
 	data = data.map((book) => {
 		author = authors.find((author) => author.id === book.authorId);

@@ -1,18 +1,21 @@
-const BookModel = require("../../../models/Book");
+const addBook = async (parent, args, context, info) => {
+	const { db, requiresAuth } = await context(); // get methods from context
+	const permission = "create:book"; // required permission to access this endpoint
+	await requiresAuth(permission);
 
-const addBook = (parent, args, context, info) => {
 	const book = {
-		isbn: args.isbn,
-		title: args.title,
-		subtitle: args.subtitle,
-		authorId: args.authorId,
-		published: args.published,
-		publisher: args.publisher,
-		pages: args.pages,
-		description: args.description,
-		website: args.website,
+		isbn: args.input.isbn,
+		title: args.input.title,
+		subtitle: args.input.subtitle,
+		authorId: args.input.authorId,
+		published: args.input.published,
+		publisher: args.input.publisher,
+		pages: args.input.pages,
+		description: args.input.description,
+		website: args.input.website,
 	};
-	new BookModel().add(book);
+	new db.BookModel().add(book);
+	console.log(book);
 	return book;
 };
 
