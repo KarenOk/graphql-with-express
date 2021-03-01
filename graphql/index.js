@@ -33,7 +33,10 @@ const context = async (req) => {
 		if (permission) {
 			const permitted = decoded?.permissions.includes(permission); // check that the user is permitted to access this endpoint
 			if (!permitted) {
-				throw new RequestError("Permission not found", errorTypes.FORBIDDEN);
+				throw new RequestError(
+					`Permission ${permission} not found`,
+					errorTypes.FORBIDDEN
+				);
 			}
 		}
 	};
